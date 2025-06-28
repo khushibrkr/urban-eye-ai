@@ -1,16 +1,18 @@
-
 import React, { useEffect, useState } from 'react';
 
-const CityHealthMeter = () => {
+interface CityHealthMeterProps {
+  healthScore?: number;
+}
+
+const CityHealthMeter: React.FC<CityHealthMeterProps> = ({ healthScore = 87 }) => {
   const [score, setScore] = useState(0);
-  const healthScore = 87; // This would come from API
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setScore(healthScore);
     }, 500);
     return () => clearTimeout(timer);
-  }, []);
+  }, [healthScore]);
 
   const getHealthColor = (score: number) => {
     if (score >= 80) return 'from-green-400 to-emerald-500';
@@ -65,7 +67,7 @@ const CityHealthMeter = () => {
           {/* Score display */}
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="text-4xl font-bold text-white">{score}</div>
+              <div className="text-4xl font-bold text-white">{Math.round(score)}</div>
               <div className="text-sm text-slate-300">/ 100</div>
             </div>
           </div>

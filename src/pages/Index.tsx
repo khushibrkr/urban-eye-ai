@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Home, Map, MessageSquare, Camera, List } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -5,9 +6,12 @@ import CityHealthMeter from '@/components/CityHealthMeter';
 import QuickIndicators from '@/components/QuickIndicators';
 import TodaysAlerts from '@/components/TodaysAlerts';
 import BottomNavigation from '@/components/BottomNavigation';
+import LiveIndicator from '@/components/LiveIndicator';
+import { useRealTimeData } from '@/hooks/useRealTimeData';
 
 const Index = () => {
   const navigate = useNavigate();
+  const { metrics, isLive, toggleLiveMode } = useRealTimeData();
 
   const handleViewAreaDetails = () => {
     navigate('/map');
@@ -24,22 +28,21 @@ const Index = () => {
             </h1>
             <p className="text-slate-300 text-sm">Smart City Dashboard</p>
           </div>
-          <div className="flex items-center space-x-2">
-            <span className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded-full">
-              Live
-            </span>
-            <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-          </div>
+          <LiveIndicator 
+            isLive={isLive} 
+            onToggle={toggleLiveMode}
+            lastUpdated={metrics.lastUpdated}
+          />
         </div>
       </div>
 
       {/* Main Content */}
       <div className="px-6 pb-24 space-y-6">
         {/* City Health Score */}
-        <CityHealthMeter />
+        <CityHealthMeter healthScore={metrics.healthScore} />
         
         {/* Quick Indicators */}
-        <QuickIndicators />
+        <QuickIndicators metrics={metrics} />
         
         {/* Today's Alerts */}
         <TodaysAlerts />
