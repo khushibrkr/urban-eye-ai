@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { AlertTriangle, BarChart, Water, Energy } from 'lucide-react';
+import { AlertTriangle, BarChart, Droplets, Zap } from 'lucide-react';
 
 const QuickIndicators = () => {
   const indicators = [
@@ -17,7 +16,7 @@ const QuickIndicators = () => {
       value: 'Normal',
       score: 85,
       color: 'bg-blue-500',
-      icon: Water,
+      icon: Droplets,
       unit: ''
     },
     {
@@ -25,7 +24,7 @@ const QuickIndicators = () => {
       value: 'High',
       score: 65,
       color: 'bg-yellow-500',
-      icon: Energy,
+      icon: Zap,
       unit: 'kWh'
     },
     {
