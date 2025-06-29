@@ -9,6 +9,7 @@ import Map from "./pages/Map";
 import Assistant from "./pages/Assistant";
 import Report from "./pages/Report";
 import Track from "./pages/Track";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/map" element={<Map />} />
           <Route path="/assistant" element={<Assistant />} />
           <Route path="/report" element={<Report />} />
