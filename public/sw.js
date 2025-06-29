@@ -1,10 +1,11 @@
 
-const CACHE_NAME = 'smartpulse-v1';
+const CACHE_NAME = 'smartpulse-native-v1';
 const urlsToCache = [
   '/',
   '/static/js/bundle.js',
   '/static/css/main.css',
-  '/manifest.json'
+  '/manifest.json',
+  '/index.html'
 ];
 
 // Install service worker
@@ -12,9 +13,12 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
+        console.log('Opened cache');
         return cache.addAll(urlsToCache);
       })
   );
+  // Force the waiting service worker to become the active service worker
+  self.skipWaiting();
 });
 
 // Fetch event - serve from cache when offline
@@ -23,7 +27,10 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request)
       .then((response) => {
         // Return cached version or fetch from network
-        return response || fetch(event.request);
+        if (response) {
+          return response;
+        }
+        return fetch(event.request);
       }
     )
   );
@@ -42,4 +49,6 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+  // Ensure the service worker takes control immediately
+  self.clients.claim();
 });

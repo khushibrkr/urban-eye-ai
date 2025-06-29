@@ -1,8 +1,7 @@
 
-import React, { useState, useEffect } from 'react';
-import { Home, Map, MessageSquare, Camera, List, User, LogOut } from 'lucide-react';
+import React from 'react';
+import { Map, MessageSquare } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import CityHealthMeter from '@/components/CityHealthMeter';
 import QuickIndicators from '@/components/QuickIndicators';
 import TodaysAlerts from '@/components/TodaysAlerts';
@@ -11,58 +10,13 @@ import LiveIndicator from '@/components/LiveIndicator';
 import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 import AppIcon from '@/components/AppIcon';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const navigate = useNavigate();
   const { metrics, isLive, toggleLiveMode } = useRealTimeData();
-  const { toast } = useToast();
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    // Check authentication state
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user || null);
-    };
-
-    checkAuth();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setUser(session?.user || null);
-      }
-    );
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   const handleViewAreaDetails = () => {
     navigate('/map');
-  };
-
-  const handleSignOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
-      
-      toast({
-        title: "Signed out",
-        description: "You have been successfully signed out.",
-      });
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleAuthNavigation = () => {
-    navigate('/auth');
   };
 
   return (
@@ -83,43 +37,11 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="flex items-center space-x-3">
-            <LiveIndicator 
-              isLive={isLive} 
-              onToggle={toggleLiveMode}
-              lastUpdated={metrics.lastUpdated}
-            />
-            
-            {/* Auth Section */}
-            {user ? (
-              <div className="flex items-center space-x-2">
-                <div className="flex items-center space-x-2 bg-slate-800/50 rounded-lg px-3 py-2">
-                  <User className="w-4 h-4 text-blue-400" />
-                  <span className="text-sm text-slate-300 truncate max-w-24">
-                    {user.email}
-                  </span>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleSignOut}
-                  className="text-slate-300 hover:text-white hover:bg-slate-800/50"
-                >
-                  <LogOut className="w-4 h-4" />
-                </Button>
-              </div>
-            ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleAuthNavigation}
-                className="bg-slate-800/50 border-slate-600 text-slate-200 hover:bg-slate-700/50 hover:text-white"
-              >
-                <User className="w-4 h-4 mr-2" />
-                Sign In
-              </Button>
-            )}
-          </div>
+          <LiveIndicator 
+            isLive={isLive} 
+            onToggle={toggleLiveMode}
+            lastUpdated={metrics.lastUpdated}
+          />
         </div>
       </div>
 
