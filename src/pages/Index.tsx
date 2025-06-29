@@ -7,6 +7,7 @@ import QuickIndicators from '@/components/QuickIndicators';
 import TodaysAlerts from '@/components/TodaysAlerts';
 import BottomNavigation from '@/components/BottomNavigation';
 import LiveIndicator from '@/components/LiveIndicator';
+import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 import { useRealTimeData } from '@/hooks/useRealTimeData';
 
 const Index = () => {
@@ -19,6 +20,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white">
+      {/* PWA Install Prompt */}
+      <PWAInstallPrompt />
+      
       {/* Header */}
       <div className="px-6 pt-8 pb-4">
         <div className="flex items-center justify-between">
